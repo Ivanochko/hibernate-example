@@ -24,6 +24,7 @@ public class StudentDao {
             }
 
             persistentStudentId = (Long) session.save(student);
+            student.setId(persistentStudentId);
 
             transaction.commit();
         } catch (StudentAlreadyExistException e) {
@@ -36,6 +37,10 @@ public class StudentDao {
     }
 
     public Optional<Student> getById(Long id) {
+        return getById(id, true);
+    }
+
+    public Optional<Student> getById(Long id, boolean isShowLog) {
         Transaction transaction;
         Student persistentStudent = null;
 
@@ -48,8 +53,10 @@ public class StudentDao {
 
             transaction.commit();
         } catch (StudentNotFoundException e) {
-            System.out.println("StudentDao.getById() :: " + e.getMessage());
-            e.printStackTrace();
+            if (isShowLog) {
+                System.out.println("StudentDao.getById() :: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
         return Optional.ofNullable(persistentStudent);
     }
@@ -62,9 +69,10 @@ public class StudentDao {
             Session session = HibernateUtil.openSession();
             transaction = session.beginTransaction();
 
-            persistentStudent = Optional.ofNullable(session.get(Student.class, student.getId()))
-                    .orElseThrow(() -> new StudentNotFoundException(student.getId()));
-
+            if (!isExistById(student.getId())) {
+                throw new StudentNotFoundException(student.getId());
+            }
+            persistentStudent = this.getById(student.getId()).get();
             persistentStudent.setAge(student.getAge());
             persistentStudent.setFirstName(student.getFirstName());
             persistentStudent.setLastName(student.getLastName());
@@ -115,10 +123,11 @@ public class StudentDao {
             Session session = HibernateUtil.openSession();
             transaction = session.beginTransaction();
 
-            Student persistentStudent = Optional.ofNullable(session.get(Student.class, id))
-                    .orElseThrow(() -> new StudentNotFoundException(id));
+            if (!isExistById(id)) {
+                throw new StudentNotFoundException(id);
+            }
 
-            session.delete(persistentStudent);
+            session.delete(getById(id).get());
             transaction.commit();
         } catch (StudentNotFoundException e) {
             transaction.rollback();
@@ -130,6 +139,7 @@ public class StudentDao {
     }
 
     public boolean isExistById(Long id) {
-        return getById(id).isPresent();
+        if (id == null) return false;
+        return getById(id, false).isPresent();
     }
 }

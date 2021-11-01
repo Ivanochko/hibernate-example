@@ -1,11 +1,9 @@
 package models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,6 +19,9 @@ public class University {
 
     private String name;
 
-    @OneToMany(mappedBy = "university")
-    private List<Student> students;
+    @Getter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.NONE)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "university", cascade = CascadeType.ALL)
+    private List<Student> students = new ArrayList<>();
 }

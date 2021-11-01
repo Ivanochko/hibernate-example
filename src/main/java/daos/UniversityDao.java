@@ -23,6 +23,9 @@ public class UniversityDao {
             }
 
             persistentUniversityId = (Long) session.save(university);
+
+            university.setId(persistentUniversityId);
+
             transaction.commit();
         } catch (UniversityAlreadyExistException e) {
             transaction.rollback();
@@ -33,6 +36,10 @@ public class UniversityDao {
     }
 
     public Optional<University> getById(Long id) {
+        return getById(id, true);
+    }
+
+    public Optional<University> getById(Long id, boolean isShowLog) {
         Transaction transaction;
         University persistentUniversity = null;
 
@@ -45,8 +52,10 @@ public class UniversityDao {
 
             transaction.commit();
         } catch (UniversityNotFoundException e) {
-            System.out.println("UniversityDao.getById() :: " + e.getMessage());
-            e.printStackTrace();
+            if (isShowLog) {
+                System.out.println("UniversityDao.getById() :: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
         return Optional.ofNullable(persistentUniversity);
     }
@@ -59,8 +68,9 @@ public class UniversityDao {
             Session session = HibernateUtil.openSession();
             transaction = session.beginTransaction();
 
-            persistentUniversity = Optional.ofNullable(session.get(University.class, university.getId()))
-                    .orElseThrow(() -> new UniversityNotFoundException(university.getId()));
+            if (!isExistById(university.getId())) {
+                throw new UniversityNotFoundException(university.getId());
+            }
 
             persistentUniversity.setName(persistentUniversity.getName());
 
@@ -75,6 +85,7 @@ public class UniversityDao {
     }
 
     public boolean isExistById(Long id) {
-        return getById(id).isPresent();
+        if (id == null) return false;
+        return getById(id, false).isPresent();
     }
 }

@@ -8,10 +8,10 @@
         <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">Ivanochko</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernate_intro_db</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernate-example</property>
 
         <property name="connection.pool_size">5</property>
-        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
 
         <mapping class="models.Student"/>
