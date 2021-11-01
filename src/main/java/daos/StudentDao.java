@@ -28,7 +28,7 @@ public class StudentDao {
             transaction.commit();
         } catch (StudentAlreadyExistException e) {
             transaction.rollback();
-            System.out.println("save() :: " + e.getMessage());
+            System.out.println("StudentDao.save() :: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -48,7 +48,7 @@ public class StudentDao {
 
             transaction.commit();
         } catch (StudentNotFoundException e) {
-            System.out.println("getById() :: " + e.getMessage());
+            System.out.println("StudentDao.getById() :: " + e.getMessage());
             e.printStackTrace();
         }
         return Optional.ofNullable(persistentStudent);
@@ -74,7 +74,7 @@ public class StudentDao {
             transaction.commit();
         } catch (StudentNotFoundException e) {
             transaction.rollback();
-            System.out.println("update() :: " + e.getMessage());
+            System.out.println("StudentDao.update() :: " + e.getMessage());
             e.printStackTrace();
         }
         return Optional.ofNullable(persistentStudent);
@@ -103,7 +103,7 @@ public class StudentDao {
             transaction.commit();
         } catch (StudentNotFoundException e) {
             transaction.rollback();
-            System.out.println("updateByQuery() :: " + e.getMessage());
+            System.out.println("StudentDao.updateByQuery() :: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -122,7 +122,7 @@ public class StudentDao {
             transaction.commit();
         } catch (StudentNotFoundException e) {
             transaction.rollback();
-            System.out.println("update() :: " + e.getMessage());
+            System.out.println("StudentDao.update() :: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
