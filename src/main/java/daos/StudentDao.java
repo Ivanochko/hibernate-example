@@ -10,7 +10,7 @@ import utils.HibernateUtil;
 import javax.persistence.Query;
 import java.util.Optional;
 
-public class StudentDao {
+public class StudentDao implements Dao {
 
     public Optional<Long> save(Student student) {
         Transaction transaction = null;

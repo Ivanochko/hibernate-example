@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         UniversityDao universityDao = new UniversityDao();
-//        StudentDao studentDao = ProxyUtil.createProxy(new StudentDao());
         StudentDao studentDao = new StudentDao();
 
         University firstUniversity = University.builder()

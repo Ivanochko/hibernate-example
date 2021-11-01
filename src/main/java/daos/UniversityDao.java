@@ -9,7 +9,7 @@ import utils.HibernateUtil;
 
 import java.util.Optional;
 
-public class UniversityDao {
+public class UniversityDao implements Dao {
     public Optional<Long> save(University university) {
         Transaction transaction = null;
         Long persistentUniversityId = null;
